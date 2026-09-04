@@ -1,0 +1,127 @@
+{
+  "name": "local-tarot-draw",
+  "version": "0.1.0",
+  "description": "本地塔罗抽牌器桌面版 - 开源、离线、保护隐私的跨平台塔罗抽牌与推演记录工具",
+  "author": "Divenire",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/divenire990/local-tarot-draw.git"
+  },
+  "bugs": {
+    "url": "https://github.com/divenire990/local-tarot-draw/issues"
+  },
+  "homepage": "https://github.com/divenire990/local-tarot-draw#readme",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "next dev",
+    "dev:open": "start http://localhost:3000 && next dev",
+    "dev:desktop": "concurrently -k \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "desktop": "electron .",
+    "build": "next build",
+    "build:desktop:prepare": "node scripts/prepare-desktop-build.mjs",
+    "build:desktop": "node scripts/build-desktop.mjs",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "visual:review": "node scripts/visual-review.mjs"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "motion": "^12.38.0",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.13"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.6",
+    "concurrently": "^9.2.1",
+    "electron": "^42.1.0",
+    "electron-builder": "^26.8.1",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "jsdom": "^29.1.1",
+    "playwright": "^1.60.0",
+    "png-to-ico": "^3.0.1",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.6",
+    "wait-on": "^9.0.10"
+  },
+  "build": {
+    "appId": "com.divenire.localtarotdraw",
+    "productName": "本地塔罗抽牌器",
+    "toolsets": {
+      "winCodeSign": "1.1.0"
+    },
+    "directories": {
+      "buildResources": "build",
+      "output": "dist-desktop"
+    },
+    "files": [
+      "electron/**/*",
+      "build/icon.ico",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": ".next/standalone/server.js",
+        "to": "standalone/server.js"
+      },
+      {
+        "from": ".next/standalone/package.json",
+        "to": "standalone/package.json"
+      },
+      {
+        "from": ".next/standalone/.next",
+        "to": "standalone/.next",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": ".next/standalone/public",
+        "to": "standalone/public",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": ".next/standalone/node_modules",
+        "to": "standalone/node_modules",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "LocalTarotDraw-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "本地塔罗抽牌器",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "uninstallDisplayName": "本地塔罗抽牌器"
+    }
+  }
+}
