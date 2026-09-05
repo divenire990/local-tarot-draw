@@ -94,12 +94,62 @@ graph TD
 
 ## 🚀 Quickstart
 
-### Prerequisites
+### Approach 1: Fast Launch & Install via npm / npx (Recommended for Windows)
+
+Run directly in your terminal without cloning the repository:
+
+```bash
+npx @divenire990/local-tarot-draw
+```
+
+Or install globally and invoke anywhere:
+
+```bash
+npm install -g @divenire990/local-tarot-draw
+local-tarot-draw
+```
+
+#### Command-Line Options
+
+```text
+local-tarot-draw [options]
+
+Options:
+  -y, --yes            Skip launch confirmation after SHA-256 verification
+  -d, --download-only  Download and verify installer without launching
+  -o, --output-dir     Directory to store the verified installer
+  -v, --version        Display CLI version
+  -h, --help           Display help message and security behavior
+```
+
+#### 🔒 CLI Security Architecture & Guarantees
+
+1. **Zero External Runtime Dependencies**: Built entirely with Node.js 20+ native standard library modules, preventing software supply chain tampering.
+2. **No Postinstall Scripts**: The package contains no install hooks. Network operations occur exclusively when explicitly executed by the user.
+3. **Strict Domain Whitelist & HTTPS**: All network traffic is strictly confined to official GitHub Releases (`divenire990/local-tarot-draw`) and official CDN domains over HTTPS.
+4. **Streaming SHA-256 Cryptographic Verification**: The installer binary is streamed and hashed, then strictly compared against the official `.sha256` asset. **If the hash does not match, the file is deleted immediately and will never be launched**.
+5. **No-Shell Process Spawning & User Confirmation**: An interactive confirmation prompt is required before launching (unless `--yes` is specified). The executable is spawned directly with `shell: false`, eliminating command injection vectors.
+
+#### 💻 Platform Support
+
+- **Windows**: Full automated download, SHA-256 verification, and installer launch.
+- **macOS / Linux**: The desktop installer (`.exe`) is packaged for Windows. On non-Windows platforms, the CLI provides friendly instructions with links to GitHub Releases and local web setup.
+
+#### 📦 Direct Release Download Alternative
+
+If you prefer manual installation without Node.js or npm, download assets and checksums directly:
+- **GitHub Releases Page**: [https://github.com/divenire990/local-tarot-draw/releases](https://github.com/divenire990/local-tarot-draw/releases)
+
+---
+
+### Approach 2: Clone & Local Web Mode (Cross-Platform)
+
+#### Prerequisites
 
 - [Node.js](https://nodejs.org/) `>= 20.0.0`
 - `npm` `>= 10.0.0`
 
-### Clone & Install
+#### Clone & Install
 
 ```bash
 git clone https://github.com/divenire990/local-tarot-draw.git
@@ -107,7 +157,7 @@ cd local-tarot-draw
 npm install
 ```
 
-### Development
+#### Development
 
 - **Web Development Mode**:
   ```bash
@@ -121,16 +171,18 @@ npm install
   ```
   Launches the Next.js development server and the native Electron window.
 
-### Tests & Linting
+#### Tests & Linting
 
 ```bash
 # Run unit and integration tests with coverage
 npm test
 
+# Run CLI package tests
+npm run test:cli
+
 # Run ESLint check
 npm run lint
 ```
-
 ---
 
 ## 📦 Production Build & Desktop Packaging

@@ -94,12 +94,62 @@ graph TD
 
 ## 🚀 快速上手
 
-### 环境准备
+### 途径 1：通过 npm / npx 快速安装与运行（推荐 Windows 桌面用户）
+
+无需克隆仓库，直接在终端执行：
+
+```bash
+npx @divenire990/local-tarot-draw
+```
+
+或全局安装后直接运行：
+
+```bash
+npm install -g @divenire990/local-tarot-draw
+local-tarot-draw
+```
+
+#### 常用命令行参数
+
+```text
+local-tarot-draw [选项]
+
+选项：
+  -y, --yes            SHA-256 校验通过后跳过确认，自动启动安装程序
+  -d, --download-only  仅下载并完成 SHA-256 校验，不启动安装程序
+  -o, --output-dir     指定已验证安装程序的保存目录（默认系统安全临时目录）
+  -v, --version        查看 CLI 版本
+  -h, --help           查看帮助说明与安全行为
+```
+
+#### 🔒 CLI 安全性与可信行为规范
+
+1. **零外部运行时依赖**：完全基于 Node.js 20+ 原生内建模块构建，杜绝供应链投毒。
+2. **无任何 postinstall 脚本**：安装包本身不包含任何安装期钩子脚本，绝不在后台执行隐蔽网络连接；仅在用户显式在命令行触发时运行。
+3. **严格限制官方源与 HTTPS**：所有请求与下载严格限制于官方 GitHub Releases (`divenire990/local-tarot-draw`) 与官方存储 CDN，严厉杜绝钓鱼域名或中间人跳转。
+4. **流式 SHA-256 完整性强校验**：下载时流式计算二进制散列，并与官方发布时签发的 `.sha256` 散列严格比对。**若校验失败立即销毁本地文件且绝不启动**。
+5. **无 Shell 启动与交互确认**：校验通过后默认提示用户交互确认（输入 `y`），以隔离进程直接调用安装程序（`shell: false`），杜绝命令注入。
+
+#### 💻 操作系统平台支持
+
+- **Windows**：全自动完成下载、SHA-256 校验与安装引导。
+- **macOS / Linux**：当前独立桌面安装程序（.exe）面向 Windows 打包。非 Windows 平台运行 CLI 会友好提示并输出 GitHub Release 下载页与本地 Web 运行指引。
+
+#### 📦 备选方式：直接前往 GitHub Release 下载
+
+若您不使用 Node.js 或 npm，可直接前往官方发布页面手动下载并核对校验码：
+- **GitHub Releases 发布页**：[https://github.com/divenire990/local-tarot-draw/releases](https://github.com/divenire990/local-tarot-draw/releases)
+
+---
+
+### 途径 2：源码克隆与本地 Web 运行（全平台通用）
+
+#### 环境准备
 
 - [Node.js](https://nodejs.org/) `>= 20.0.0`
 - `npm` `>= 10.0.0`
 
-### 源码拉取与安装
+#### 源码拉取与安装
 
 ```bash
 git clone https://github.com/divenire990/local-tarot-draw.git
@@ -107,7 +157,7 @@ cd local-tarot-draw
 npm install
 ```
 
-### 开发模式
+#### 开发模式
 
 - **Web 开发模式**：
   ```bash
@@ -121,16 +171,18 @@ npm install
   ```
   自动启动本地服务并调起 Electron 原生桌面窗口。
 
-### 自动化测试与代码检查
+#### 自动化测试与代码检查
 
 ```bash
 # 运行单元与集成测试（含覆盖率）
 npm test
 
+# 运行 CLI 子包独立测试
+npm run test:cli
+
 # 运行 ESLint 静态代码检查
 npm run lint
 ```
-
 ---
 
 ## 📦 生产构建与桌面打包

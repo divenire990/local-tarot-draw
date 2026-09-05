@@ -1,0 +1,35 @@
+{
+  "name": "@divenire990/local-tarot-draw",
+  "version": "0.1.0",
+  "description": "Lightweight CLI installer and launcher for Local Tarot Draw (Windows EXE with SHA-256 verification)",
+  "type": "module",
+  "bin": {
+    "local-tarot-draw": "./bin/local-tarot-draw.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/divenire990/local-tarot-draw.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/divenire990/local-tarot-draw#readme",
+  "bugs": {
+    "url": "https://github.com/divenire990/local-tarot-draw/issues"
+  },
+  "author": "Divenire",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  }
+}

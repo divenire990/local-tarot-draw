@@ -23,8 +23,9 @@
     "build:desktop": "node scripts/build-desktop.mjs",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run --coverage",
+    "test": "vitest run src --coverage",
     "test:watch": "vitest",
+    "test:cli": "node --test packages/cli/test/*.test.mjs",
     "visual:review": "node scripts/visual-review.mjs"
   },
   "dependencies": {
