@@ -1,0 +1,81 @@
+name: Normalize project metadata
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/normalize-project-metadata.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Normalize package metadata and docs
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const engines = { node: '>=20.19.0', npm: '>=10.0.0' };
+
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          pkg.engines = engines;
+          fs.writeFileSync('package.json', `${JSON.stringify(pkg, null, 2)}\n`);
+
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          if (!lock.packages || !lock.packages['']) {
+            throw new Error('package-lock.json is missing packages[""] metadata');
+          }
+          lock.name = pkg.name;
+          lock.version = pkg.version;
+          lock.packages[''].name = pkg.name;
+          lock.packages[''].version = pkg.version;
+          lock.packages[''].engines = engines;
+          fs.writeFileSync('package-lock.json', `${JSON.stringify(lock, null, 2)}\n`);
+
+          for (const file of ['README.md', 'README.en.md']) {
+            let text = fs.readFileSync(file, 'utf8');
+            const oldText = '`>= 20.0.0`';
+            if (!text.includes(oldText)) {
+              throw new Error(`${file}: expected Node.js prerequisite not found`);
+            }
+            text = text.replace(oldText, '`>= 20.19.0`');
+            fs.writeFileSync(file, text);
+          }
+          NODE
+
+          rm .github/workflows/normalize-project-metadata.yml
+
+      - name: Verify normalized metadata
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+          if (pkg.name !== 'local-tarot-draw') throw new Error('Unexpected package name');
+          if (pkg.engines?.node !== '>=20.19.0') throw new Error('Root Node engine not normalized');
+          if (lock.name !== pkg.name || lock.packages[''].name !== pkg.name) throw new Error('Lockfile name mismatch');
+          if (lock.packages[''].engines?.node !== '>=20.19.0') throw new Error('Lockfile engine mismatch');
+          for (const file of ['README.md', 'README.en.md']) {
+            const text = fs.readFileSync(file, 'utf8');
+            if (!text.includes('`>= 20.19.0`')) throw new Error(`${file}: Node prerequisite not updated`);
+          }
+          NODE
+
+      - name: Commit normalized files and remove one-shot workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json README.md README.en.md .github/workflows/normalize-project-metadata.yml
+          git commit -m "fix: normalize Node requirements and package metadata"
+          git push origin HEAD:main
