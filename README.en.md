@@ -146,7 +146,7 @@ If you prefer manual installation without Node.js or npm, download assets and ch
 
 #### Prerequisites
 
-- [Node.js](https://nodejs.org/) `>= 20.0.0`
+- [Node.js](https://nodejs.org/) `>= 20.19.0`
 - `npm` `>= 10.0.0`
 
 #### Clone & Install

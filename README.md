@@ -146,7 +146,7 @@ local-tarot-draw [选项]
 
 #### 环境准备
 
-- [Node.js](https://nodejs.org/) `>= 20.0.0`
+- [Node.js](https://nodejs.org/) `>= 20.19.0`
 - `npm` `>= 10.0.0`
 
 #### 源码拉取与安装
