@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Release](https://img.shields.io/badge/Release-v0.1.0-blue.svg)](https://github.com/divenire990/local-tarot-draw/releases)
-[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20.19.0-brightgreen.svg)](https://nodejs.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16.2.6-black.svg)](https://nextjs.org/)
 [![Electron](https://img.shields.io/badge/Electron-42.1.0-47848F.svg)](https://www.electronjs.org/)
 
